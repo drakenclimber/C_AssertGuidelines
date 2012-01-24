@@ -49,6 +49,7 @@ C solution.  Specifically:
 
 
 In summary, the breakdown of the three builds is as follows:
+
             +------+-----------+---------------+----------+
             |Build |  Asserts  |  Optimization |  Debug   |
             |      |  Enabled? |  Level        | Symbols? |
