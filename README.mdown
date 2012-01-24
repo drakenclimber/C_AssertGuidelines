@@ -1,0 +1,129 @@
+#*******************************************************************************
+#
+#  Copyright 2012 Drakenclimber, LLC.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+#*******************************************************************************
+
+#*******************************************************************************
+# 1. Table of Contents
+#*******************************************************************************
+
+1. Table of Contents
+2. Build Types
+3. Assert Background
+4. Asserts vs. Error Codes
+5. Advantages/Disadvantages of Asserts
+6. Summary
+
+#*******************************************************************************
+# 2. Build Types
+#*******************************************************************************
+
+I recommend three distinct build types during the development of an embedded
+C solution.  Specifically:
+
+* Release Build - this build is the build that should be released to the public.
+                  asserts should be compiled out, optimizations should be enabled,
+                  and debug symbols should be disabled.
+
+* Development Build - this build is identical to a release build, but asserts are
+                      enabled.  this should allow for (nearly) identical 
+                      timing/interaction in complex, multi-threaded applications
+                      yet still allow for critical errors to be trapped.
+
+* Debug Build - this build should only be run if a debugger is to be connected
+                to the device.  when possible, optimizations should be disabled
+                so that code stepping/debugger performance is maximized.
+
+
+In summary, the breakdown of the three builds is as follows:
+            +------+-----------+---------------+----------+
+            |Build |  Asserts  |  Optimization |  Debug   |
+            |      |  Enabled? |  Level        | Symbols? |
+            +------+-----------+---------------+----------+
+            | REL  |     No    | -O2 -Ospace   |    No    |
+            | DEV  |    Yes    | -O2 -Ospace   |    No    |
+            | DBG  |    Yes    | -O0 -Ospace   |   Yes    |
+            +------+-----------+---------------+----------+
+
+#*******************************************************************************
+# 3. Assert Background
+#*******************************************************************************
+
+Like any tool, asserts are a tremendous asset when used properly.  Asserts
+are designed to catch failed assumptions early in the development of a product.
+
+For companies utilizing the waterfall methodology, this is critical; the later
+a bug/fault is found, the more expensive it is.  For companies using agile
+methodologies, proper use of asserts allow developers to quickly identify and
+fix issues as requirements change.
+
+Finally, asserts are an invaluable tool when used in conjunction with a clean,
+well-defined API.  Asserts can assist in the rapid integration of a module into
+a complex system.
+
+#*******************************************************************************
+# 4. Asserts vs. Error Codes
+#*******************************************************************************
+
+So when should an engineer use an assert versus an error code?  As a general
+rule of thumb, I recommend using asserts whenever possible.  But asserts should
+not be used if the assumptions can be violated in a release (real-world) build.
+
+The following flow chart outlines when to use asserts versus error codes
+
+[![](https://github.com/drakenclimber/C_AssertGuidelines/blob/baf39d034b56ab08755c3d735f515a6c8d026106/img/flowchart.png)](https://github.com/drakenclimber/C_AssertGuidelines/blob/baf39d034b56ab08755c3d735f515a6c8d026106/img/flowchart.png)
+
+#*******************************************************************************
+# 5. Advantages/Disadvantages of Asserts
+#*******************************************************************************
+
+The following table summarizes the advantages/disadvantages of asserts versus
+error codes.
+
+      +---------------+-----------------------------+--------------------------+
+      |               |            Asserts          |      Error Codes         |
+      +---------------+-----------------------------+--------------------------+
+      | Advantages    | 1. When an assert is        | 1. Protection from       |
+      |               |    triggered, it requires   |    "stupid" users.       |
+      |               |    immediate attention by   | 2. Protection from bad   |
+      |               |    the engineer.            |    data (out of bounds,  |
+      |               | 2. Compiled out in release  |    early terminated,     |
+      |               |    builds.  No code bloat.  |    invalid formatting,   |
+      |               |                             |    etc.)                 |
+      |               |                             | 3. Consistent behavior   |
+      |               |                             |    in all builds. Always |
+      |               |                             |    available.            |
+      +---------------+-----------------------------+--------------------------+
+      | Disadvantages | 1. Compiled out in release  | 1. Do not required       |
+      |               |    builds. (Yes, this can   |    immediate resolution. |
+      |               |    be a disadvantage as     |    Often ignored.        |
+      |               |    well.)                   | 2. The error propagates  |
+      |               | 2. Code bloat in non-release|    up to the caller      |
+      |               |    builds.  __FILE__,       |    a. Now it is his      |
+      |               |    __FUNCTION__ can generate|       problem. What does |
+      |               |    long strings in some     |       he do with it?     |
+      |               |    toolchains.              |    b. Leads to code bloat|
+      +---------------+-----------------------------+--------------------------+
+      
+#*******************************************************************************
+# 6. Summary
+#*******************************************************************************
+
+Asserts are designed to catch errors that should be caught during development.
+
+Error codes are designed to catch errors that can (and will) arise in a released
+product.
+
