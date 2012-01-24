@@ -84,7 +84,7 @@ not be used if the assumptions can be violated in a release (real-world) build.
 
 The following flow chart outlines when to use asserts versus error codes
 
-[![](https://github.com/drakenclimber/C_AssertGuidelines/blob/baf39d034b56ab08755c3d735f515a6c8d026106/img/flowchart.png)](https://github.com/drakenclimber/C_AssertGuidelines/blob/baf39d034b56ab08755c3d735f515a6c8d026106/img/flowchart.png)
+[![](https://github.com/drakenclimber/C_AssertGuidelines/blob/baf39d034b56ab08755c3d735f515a6c8d026106/img/flowchart.png?raw=true)](https://github.com/drakenclimber/C_AssertGuidelines/blob/baf39d034b56ab08755c3d735f515a6c8d026106/img/flowchart.png?raw=true)
 
 #*******************************************************************************
 # 5. Advantages/Disadvantages of Asserts
